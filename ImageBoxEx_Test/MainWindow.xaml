@@ -1,0 +1,73 @@
+﻿<Window x:Class="ImageBoxEx_Test.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageBoxEx_Test"
+        mc:Ignorable="d"
+        xmlns:commonui="clr-namespace:Project.UI.Common;assembly=Project.UI.Common"
+        
+        Height="1024" Width="1280"
+        WindowStyle="SingleBorderWindow"
+        WindowState="Maximized"        
+        >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="7*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Grid.Row="0" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+
+                <Button Content="Load Image" Click="Button_Click"/>
+
+                <Button Content="Add Rectangle" Click="Button_Click_1"/>
+
+                <Button Content="Add Circle" Click="Button_Click_2"/>
+
+                <Button Content="Add Line" Click="Button_Click_3"/>
+
+                <Button Content="Add String" Click="Button_Click_4"/>
+
+                <Button Content="Change Cursor" Click="Button_Click_5"/>
+
+                <Button Content="Add Cross Line" Click="Button_Click_6"/>
+
+                <Button Content="Toggle EnableSelected" Click="Button_Click_7"/>
+
+                <Button Content="Add Start Arrow" Click="Button_Click_8"/>
+
+                <Button Content="Add End Arrow" Click="Button_Click_9"/>
+
+                <Button Content="Toggle Center Cross Line" Click="Button_Click_10"/>
+
+                <Button Content="ClearAll" Click="Button_Click_11"/>
+
+                <Button Content="SaveFile" Click="Button_Click_12"/>
+
+                <Button Content="Test" Click="Button_Click_13"/>
+
+                <Button Content="Load Folder" Click="Button_Click_14"/>
+            </StackPanel>
+        </StackPanel>
+
+        <GroupBox Grid.Row="1">
+            <commonui:ImageViewEx Name="ImageView" ViewName="ImageView"
+                                  VerticalScrollBarStyle="Hide"
+                                  HorizontalScrollBarStyle="Hide"
+                                  IsEnableWheelZoom="True"
+                                  IsEnableZoomToFit="True"
+                                  
+                                  IsEnableCenterLine="True"
+                                  IsEnablePixelInfo="True"
+                                  IsEnableSelected="False"
+                                  ShowPixelGrid="True" Margin="2,0,-2,0"/>
+        </GroupBox>
+
+        <GroupBox Grid.Row="2" Header="Log">
+            <commonui:LogView/>
+        </GroupBox>
+    </Grid>
+</Window>

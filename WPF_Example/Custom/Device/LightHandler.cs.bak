@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ReringProject.Device {
+    /// <summary>
+    /// 시스템에서 사용되는 조명 장치를 설정합니다.
+    /// </summary>
+    public sealed partial class LightHandler {
+
+        public const string LIGHT_WAFER = "WAFER";
+
+        public const string LIGHT_FRONT_TOP = "FRONT_TOP";
+        public const string LIGHT_REAR_TOP = "REAR_TOP";
+        
+        public const string LIGHT_FRONT_BOTTOM = "FRONT_BOTTOM";
+        public const string LIGHT_REAR_BOTTOM = "REAR_BOTTOM";
+        
+
+        /// <summary>
+        /// 사용되는 조명 컨트롤러 및 조명 그룹 (제어 단위) 을 설정합니다.
+        /// </summary>
+        public void RegisterLightController() {
+            //add light controller
+            Controllers.Add(new PamtekLightController(0).SetChannelNames(LIGHT_WAFER));
+            Controllers.Add(new PamtekLightController(1).SetChannelNames(LIGHT_FRONT_TOP, LIGHT_REAR_TOP, LIGHT_FRONT_BOTTOM, LIGHT_REAR_BOTTOM));
+
+            //add light group
+            //wafer
+            Groups.Add(new LightGroup(LIGHT_WAFER).AddChannel(LIGHT_WAFER));
+
+            //top
+            Groups.Add(new LightGroup(LIGHT_FRONT_TOP).AddChannel(LIGHT_FRONT_TOP));
+            Groups.Add(new LightGroup(LIGHT_REAR_TOP).AddChannel(LIGHT_REAR_TOP));
+
+            //bottom
+            Groups.Add(new LightGroup(LIGHT_FRONT_BOTTOM).AddChannel(LIGHT_FRONT_BOTTOM));
+            Groups.Add(new LightGroup(LIGHT_REAR_BOTTOM).AddChannel(LIGHT_REAR_BOTTOM));
+        }
+    }
+}

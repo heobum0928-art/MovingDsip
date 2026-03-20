@@ -1,0 +1,117 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ReringProject.Define;
+using ReringProject.Device;
+
+namespace ReringProject.Sequence {
+    public sealed partial class SequenceHandler {
+
+        public const string SEQ_WAFER = "WAFER";
+
+        public const string SEQ_FRONT_TOP = "FRONT_TOP";
+        public const string SEQ_REAR_TOP = "REAR_TOP";
+
+        public const string SEQ_FRONT_BOTTOM = "FRONT_BOTTOM";
+        public const string SEQ_REAR_BOTTOM = "REAR_BOTTOM";
+        
+
+        public const string ACT_CALIB = "Calibration";
+        public const string ACT_INSPECT = "Inspect";
+        public const string ACT_INSPECT_LEFT = "Inspect_Left";
+        public const string ACT_INSPECT_RIGHT = "Inspect_Right";
+        public const string ACT_SCAN = "SCAN";
+
+        //alg index
+        public const int Wafer_Alg_Index = 0;
+
+        public const int FrontTop_Alg_Index = 1;
+        public const int RearTop_Alg_Index = 2;
+
+        public const int FrontBottom_Alg_Index = 3;
+        public const int RearBottom_Alg_Index = 4;
+
+        //Model & Pattern Index
+        //pattern
+        public const int Inspection_Model_Index = 0;
+        public const int Calibration_Model_Index = 1;
+
+        
+        /// <summary>
+        /// Sequence를 정의합니다.
+        /// </summary>
+        private void RegisterSequences() {
+            //SequenceBuilder에 현재 프로젝트에서 사용될 Sequence를 추가시킵니다.
+            SequenceBuilder.RegisterSequence(
+                new WaferSequence(ESequence.Wafer, SEQ_WAFER, Wafer_Alg_Index, DeviceHandler.CAMERA_WAFER, LightHandler.LIGHT_WAFER),
+
+                new TopSequence(ESequence.FrontTop, SEQ_FRONT_TOP, FrontTop_Alg_Index, DeviceHandler.CAMERA_FRONT_TOP, LightHandler.LIGHT_REAR_TOP),
+                new TopSequence(ESequence.RearTop, SEQ_REAR_TOP, RearTop_Alg_Index, DeviceHandler.CAMERA_REAR_TOP, LightHandler.LIGHT_REAR_TOP),
+                
+                new BottomSequence(ESequence.FrontBottom, SEQ_FRONT_BOTTOM, FrontBottom_Alg_Index, DeviceHandler.CAMERA_FRONT_BOTTOM, LightHandler.LIGHT_REAR_BOTTOM),
+                new BottomSequence(ESequence.RearBottom, SEQ_REAR_BOTTOM, RearBottom_Alg_Index, DeviceHandler.CAMERA_REAR_BOTTOM, LightHandler.LIGHT_REAR_BOTTOM)
+                );
+        }
+
+        private void RegisterActions() {
+            //SequenceBuilder에 현재 프로젝트에서 사용될 Action을 추가시킵니다.
+            SequenceBuilder.RegisterAction(
+                //Wafer
+                new WaferScanCalibrationAction(EAction.Wafer_Calibration, ACT_CALIB, Wafer_Alg_Index, Calibration_Model_Index),
+                new WaferScanInspectionAction(EAction.LeftWafer_Inspection, ACT_INSPECT_LEFT, Wafer_Alg_Index, Inspection_Model_Index),
+                new WaferScanInspectionAction(EAction.RightWafer_Inspection, ACT_INSPECT_RIGHT, Wafer_Alg_Index, Inspection_Model_Index),
+
+                //front top
+                new TopCalibrationAction(EAction.FrontTop_Calibration, ACT_CALIB, FrontTop_Alg_Index, Calibration_Model_Index),
+                
+                //rear top
+                new TopCalibrationAction(EAction.RearTop_Calibration, ACT_CALIB, RearTop_Alg_Index, Calibration_Model_Index),
+                
+                //front bottom
+                new BottomCalibrationAction(EAction.FrontBottom_Calibration, ACT_CALIB, FrontBottom_Alg_Index, Calibration_Model_Index),
+                new BottomInspectionAction(EAction.FrontBottom_Inspection, ACT_INSPECT, FrontBottom_Alg_Index, Inspection_Model_Index),
+                
+                //rear bottom
+                new BottomCalibrationAction(EAction.RearBottom_Calibration, ACT_CALIB, RearBottom_Alg_Index, Calibration_Model_Index),
+                new BottomInspectionAction(EAction.RearBottom_Inspection, ACT_INSPECT, RearBottom_Alg_Index, Inspection_Model_Index)
+
+                );
+        }
+        
+        /// <summary>
+        /// Sequence와 Action의 관계를 정의합니다. (Sequence -> Action 관계입니다.)
+        /// </summary>
+        private void InitializeSequences() {
+            SequenceBuilder seq;
+            //wafer
+            seq = SequenceBuilder.CreateSequence(ESequence.Wafer);
+            seq.AddAction(EAction.Wafer_Calibration, EAction.LeftWafer_Inspection, EAction.RightWafer_Inspection);
+            RegisterSequence(seq);
+
+            //front top
+            seq = SequenceBuilder.CreateSequence(ESequence.FrontTop);
+            seq.AddAction(EAction.FrontTop_Calibration);
+            RegisterSequence(seq);
+
+            //reat top
+            seq = SequenceBuilder.CreateSequence(ESequence.RearTop);
+            seq.AddAction(EAction.RearTop_Calibration);
+            RegisterSequence(seq);
+
+
+            //front bottom
+            seq = SequenceBuilder.CreateSequence(ESequence.FrontBottom);
+            seq.AddAction(EAction.FrontBottom_Calibration, EAction.FrontBottom_Inspection);
+            RegisterSequence(seq);
+
+            //rear bottom
+            seq = SequenceBuilder.CreateSequence(ESequence.RearBottom);
+            seq.AddAction(EAction.RearBottom_Calibration, EAction.RearBottom_Inspection);
+            RegisterSequence(seq);
+
+        }
+
+    }
+}

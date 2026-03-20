@@ -1,0 +1,27 @@
+# Visual Studio temp
+.vs/
+
+# Build outputs
+[Dd]ebug/
+[Rr]elease/
+[Xx]64/
+[Xx]86/
+**/bin/
+**/obj/
+
+# NuGet packages (restored automatically)
+**/packages/
+*.nupkg
+*.snupkg
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Log / temp
+*.log
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
