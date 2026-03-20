@@ -13,6 +13,7 @@ using ReringProject.UI;
 using ReringProject.UserData;
 using ReringProject.Login;
 using ReringProject.Properties;
+using ReringProject.Plc;
 
 namespace ReringProject {
 
@@ -37,6 +38,9 @@ namespace ReringProject {
         public VisionServer Server { get; private set; }
 
         public GlobalUserData UserData { get; private set; }
+
+        //260320 hbk - PLC MX Component 핸들러
+        public PlcHandler Plc { get; private set; }
 
         public LocalizationResource Localize { get; set; }
 
@@ -68,10 +72,13 @@ namespace ReringProject {
             //5. device
             Devices = DeviceHandler.Handle;
             EInitializeResult result = Devices.Initialize();
+#if !SIMUL_MODE
+            //260320 hbk - 실 장비 모드에서만 카메라 초기화 실패 팝업 표시 (SIMUL_MODE 시 VirtualCamera로 대체되므로 생략)
             if (result != EInitializeResult.Success) {
                 IsInitializeFail = true;
                 CustomMessageBox.Show("Error", "Camera Initialize Fail", MessageBoxImage.Error);
             }
+#endif
 
             //6. lights
             Lights = LightHandler.Handle;
@@ -82,10 +89,16 @@ namespace ReringProject {
         public void Initialize() {
 
             //1. light
+#if !SIMUL_MODE
+            //260320 hbk - 실 장비 모드에서만 조명 초기화 실패 팝업 표시
             if (Lights.Initialize() == false) {
                 IsInitializeFail = true;
                 CustomMessageBox.Show("Error", "Light Controller Open Fail", MessageBoxImage.Error);
             }
+#else
+            //260320 hbk - SIMUL_MODE: 조명 컨트롤러 없어도 계속 진행
+            Lights.Initialize();
+#endif
 
             //2. sequence
             Sequences = SequenceHandler.Handle;
@@ -93,6 +106,10 @@ namespace ReringProject {
             //3. server
             Server = new VisionServer();
             
+            //260320 hbk - PLC 핸들러 초기화 (MX Component 연동)
+            Plc = new PlcHandler();
+            Plc.Initialize();
+
             //4. Main Thread
             mSystemThread = new Thread(SystemProcess);
             mSystemThread.Priority = ThreadPriority.Highest;
@@ -133,7 +150,10 @@ namespace ReringProject {
             Devices.Dispose();
 
             Sequences.Dispose();
-            
+
+            //260320 hbk - PLC 핸들러 해제
+            Plc?.Dispose();
+
             Server.Dispose();
 
             Lights.Release();

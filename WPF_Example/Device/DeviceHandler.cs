@@ -75,15 +75,21 @@ namespace ReringProject.Device {
 
             //enum basler device
             int baslerConnectedCount = 0;
+#if !SIMUL_MODE
+            //260320 hbk - SIMUL_MODE 시 Basler SDK 호출 생략 (DLL 없으면 TypeInitializationException 발생)
             if (IDList.Select(id => id.CamType == ECameraType.Basler) != null) {
                 baslerConnectedCount = BaslerCamera.EnumerateDevice();
             }
+#endif
 
             //enum hik device
             int hikConnectedCount = 0;
+#if !SIMUL_MODE
+            //260320 hbk - SIMUL_MODE 시 HIK SDK 호출 생략 (DLL 없으면 TypeInitializationException 발생)
             if(IDList.Select(id => id.CamType == ECameraType.HIK) != null) {
                 hikConnectedCount = HikCamera.EnumerateDevice();
             }
+#endif
             
             int baslerCamIndex = 0;
             int hikCamIndex = 0;

@@ -21,6 +21,11 @@ namespace ReringProject.Sequence
     // 0319 자재 유무 검사 액션 컨텍스트
     public class MaterialCheckActionContext : ActionContext
     {
+        //260320 hbk - 컨투어 검출 결과 (PlcHandler가 읽어서 D번지에 기록)
+        public int    MatWidth  { get; set; }
+        public int    MatHeight { get; set; }
+        public double MatArea   { get; set; }
+
         #region constructors
         public MaterialCheckActionContext(ActionBase source) : base(source)
         {
@@ -366,7 +371,28 @@ namespace ReringProject.Sequence
 
                     // 0319 모든 조건 통과 - 자재 있음
                     Context.Result = EContextResult.Pass;
-                    Logging.PrintLog((int)ELogType.Trace, "MaterialCheck: 자재 있음 (Pass) - area={0:F1}", maxArea);
+
+                    //260320 hbk - 컨투어 결과(Width, Height, Area)를 Context에 저장 → PlcHandler가 읽어서 D번지 기록
+                    if (maxIdx >= 0)
+                    {
+                        OpenCvSharp.Rect boundRect = Cv2.BoundingRect(contours[maxIdx]);
+                        MaterialCheckActionContext myCtx = Context as MaterialCheckActionContext;
+                        if (myCtx != null)
+                        {
+                            myCtx.MatWidth  = boundRect.Width;
+                            myCtx.MatHeight = boundRect.Height;
+                            myCtx.MatArea   = maxArea;
+
+                            //260320 hbk - Width/Height/Area 로그 출력 (PLC 전송 전 확인용)
+                            Logging.PrintLog((int)ELogType.Trace,
+                                "MaterialCheck: 자재 있음 (Pass) - area={0:F1}, W={1}, H={2}",
+                                myCtx.MatArea, myCtx.MatWidth, myCtx.MatHeight);
+                        }
+                    }
+                    else
+                    {
+                        Logging.PrintLog((int)ELogType.Trace, "MaterialCheck: 자재 있음 (Pass) - area={0:F1}", maxArea);
+                    }
 
                     Step++;
                     break;

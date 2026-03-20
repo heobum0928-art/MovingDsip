@@ -116,6 +116,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\bin\lib\Project.BaseLib.dll</HintPath>
     </Reference>
+    <Reference Include="Project.HWC">
+      <HintPath>..\bin\lib\Project.HWC.dll</HintPath>
+    </Reference>
     <Reference Include="Project.ProcessLib">
       <HintPath>..\bin\lib\Project.ProcessLib.dll</HintPath>
     </Reference>
@@ -188,6 +191,8 @@
     <Compile Include="Custom\Sequence\Corner\Action_CornerAlign_Calibration.cs" />
     <Compile Include="Custom\Sequence\Corner\Action_CornerAlign_Inspection.cs" />
     <Compile Include="Custom\Sequence\Corner\Action_MaterialCheck.cs" />
+    <Compile Include="Custom\Plc\PlcAddressMap.cs" />
+    <Compile Include="Custom\Plc\PlcHandler.cs" />
     <Compile Include="Custom\Sequence\Corner\Sequence_CornerAlign.cs" />
     <Compile Include="Custom\UI\MainWindow.cs" />
     <Compile Include="Device\Camera\Hik\HikCamera.cs" />

@@ -291,8 +291,9 @@ namespace ReringProject.Utility {
                 }
             }
 
-            WaitObject.Set();
-            
+            //260320 hbk - Logging.Start() 호출 전 PrintLog() 진입 시 WaitObject null 방어
+            if (WaitObject != null) WaitObject.Set();
+
             return true;
         }
         /// <summary>

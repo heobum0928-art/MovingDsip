@@ -62,7 +62,7 @@
       <HintPath>..\..\TISSystem\packages\FluentModbus.5.3.1\lib\netstandard2.0\FluentModbus.dll</HintPath>
     </Reference>
     <Reference Include="Interop.ActUtlType64Lib">
-      <HintPath>..\..\ProjectBase\ThirdParty\MxComponent\x64\Interop.ActUtlType64Lib.dll</HintPath>
+      <HintPath>..\ThirdParty\MxComponent\x64\Interop.ActUtlType64Lib.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">

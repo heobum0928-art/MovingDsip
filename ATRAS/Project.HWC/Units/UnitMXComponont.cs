@@ -161,8 +161,8 @@ namespace Project.HWC
                 return false;
             }
 
-
-            return true;
+            //260320 hbk - Device.BSend() 호출 누락 수정
+            return Device.BSend(nstartadd, size, ref data);
         }
         public bool BSend(string device, int size, ref short[] data)
         {
@@ -172,7 +172,8 @@ namespace Project.HWC
                 return false;
             }
 
-            return true;
+            //260320 hbk - Device.BSend() 호출 누락 수정
+            return Device.BSend(device, size, ref data);
         }
         #endregion
 

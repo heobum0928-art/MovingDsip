@@ -13,7 +13,10 @@ namespace ReringProject.Sequence
     public class CornerAlignSequenceContext : SequenceContext
     {
         #region fields
-
+        //260320 hbk - 자재 검사 결과 (MaterialCheckAction에서 복사)
+        public int    MatWidth  { get; set; }
+        public int    MatHeight { get; set; }
+        public double MatArea   { get; set; }
         #endregion
 
         #region propertise
@@ -24,11 +27,23 @@ namespace ReringProject.Sequence
 
         public override void Clear()
         {
+            //260320 hbk - 자재 결과 초기화
+            MatWidth  = 0;
+            MatHeight = 0;
+            MatArea   = 0.0;
             base.Clear();
         }
 
         public override void CopyFrom(ActionContext actionContext)
         {
+            //260320 hbk - MaterialCheckAction 결과이면 Width/Height/Area를 SequenceContext로 복사
+            //             PlcHandler가 OnSequenceStop에서 이 값을 읽어 D번지에 기록
+            if (actionContext is MaterialCheckActionContext matCtx)
+            {
+                MatWidth  = matCtx.MatWidth;
+                MatHeight = matCtx.MatHeight;
+                MatArea   = matCtx.MatArea;
+            }
             base.CopyFrom(actionContext);
         }
 
